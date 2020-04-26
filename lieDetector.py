@@ -64,6 +64,7 @@ else:
     fileStream = True
 time.sleep(1.0)
 
+earList = []
 while True:
     if fileStream and not vs.more():
         break
@@ -84,6 +85,7 @@ while True:
         rightEAR = eye_aspect_ratio(rightEye)
 
         mar = mouth_aspect_ratio(mouth)
+        ear = (leftEAR + rightEAR) / 2.0
 
         if frameCOUNTER <= 20:
             frameCOUNTER += 1
@@ -91,11 +93,9 @@ while True:
             frameCOUNTER = 0
             frameCOUNTER += 1
             earList.pop(0)
-
-        earList = []
-        ear = (leftEAR + rightEAR) / 2.0
+            
         earList.append(ear)
-        earAverage = sum(earList) / frameCOUNTER
+        earAverage = sum(earList) / len(earList)
 
         mouthHull = cv2.convexHull(mouth)
         leftEyeHull = cv2.convexHull(leftEye)
