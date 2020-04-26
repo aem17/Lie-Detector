@@ -36,7 +36,7 @@ ap.add_argument("-v", "--video", type=str, default="",
 args = vars(ap.parse_args())
 
 MOUTH_AR_THRESH = 0.05
-EYE_AR_THRESH = 0.31
+EYE_AR_THRESH = 0.32
 MOUTH_AR_CONSEC_FRAMES = 3
 EYE_AR_CONSEC_FRAMES = 3
 
@@ -87,15 +87,19 @@ while True:
         mar = mouth_aspect_ratio(mouth)
         ear = (leftEAR + rightEAR) / 2.0
 
-        if frameCOUNTER <= 20:
+        if frameCOUNTER < 6:
             frameCOUNTER += 1
+            if len(earList) == 6:
+                earList.pop(0)
+            earList.append(ear)
         else:
-            frameCOUNTER = 0
-            frameCOUNTER += 1
-            earList.pop(0)
-            
-        earList.append(ear)
+            frameCOUNTER = 1
+
+        #print(frameCOUNTER)
+
+        #print(earList)
         earAverage = sum(earList) / len(earList)
+
 
         mouthHull = cv2.convexHull(mouth)
         leftEyeHull = cv2.convexHull(leftEye)
